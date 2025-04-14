@@ -1,0 +1,60 @@
+# .gitignore for Django project
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc
+*.egg-info/
+dist/
+*.egg
+*.log
+*.pot
+*.pyc
+*.pyo
+*.mo
+*.so
+*.orig
+*.rej
+*.pyc
+*.pyo
+
+# Virtualenv
+venv/
+.virtualenv/
+*.venv
+
+# Django
+.db
+*.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.mo
+*.so
+*.orig
+*.rej
+*.pyc
+*.pyo
+media/
+static/
+
+# Django settings
+settings.py
+
+# Jupyter
+.ipynb_checkpoints/
+
+# PyCharm
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Other
+*.DS_Store
+Thumbs.db
