@@ -38,8 +38,6 @@ venv/
 *.rej
 *.pyc
 *.pyo
-media/
-static/
 
 # Django settings
 settings.py
@@ -58,3 +56,4 @@ settings.py
 # Other
 *.DS_Store
 Thumbs.db
+/google-secret.json

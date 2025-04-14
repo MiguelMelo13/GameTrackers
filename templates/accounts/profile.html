@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container" style="padding-top: 80px; padding-bottom: 80px;">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card bg-dark border-light">
+                    <div class="card-body p-4">
+                        <h2 class="card-title">User Profile</h2>
+                        <p>Welcome, {{ user.username }}!</p>
+                        <p>Email: {{ user.email }}</p>
+                        <!-- Add more user details as needed -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

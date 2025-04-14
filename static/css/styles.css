@@ -1,0 +1,18 @@
+/* Only adding what can't be done with Bootstrap classes */
+.navbar.bg-black {
+    background-color: #000 !important;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.card.border-light {
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
