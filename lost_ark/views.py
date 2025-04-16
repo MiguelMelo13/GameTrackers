@@ -11,7 +11,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, V
 
 from .forms import CharacterForm, WeeklyContentForm
 from .mixins import UserOwnershipMixin
-from .models import Character, CharacterWeeklyContent, CompletedGate, WeeklyContent
+from .models import Character, CharacterWeeklyContent, CompletedGate, WeeklyContent, get_current_week
 
 
 def home(request):
@@ -192,11 +192,26 @@ class WeeklyContentAddView(View):
 
             if CharacterWeeklyContent.objects.filter(character=character, weekly_content=weekly_content).exists():
                 messages.error(request, f"{weekly_content.name} already added for {character.name}.")
+                return redirect('lost_ark:weekly_content_table')
+            elif character.item_level < weekly_content.min_ilvl:
+                messages.error(request, "Character's Item level too low for this raid.")
+                return redirect('lost_ark:weekly_content_table')
 
+            new_content = CharacterWeeklyContent(
+                character=character,
+                weekly_content=weekly_content,
+                week=get_current_week(),
+                status='Not Done'
+            )
+            new_content.save()
+
+            messages.success(request, f"{weekly_content.name} successfully added for {character.name}.")
 
         except Character.DoesNotExist:
             messages.error(request, "Character not found.")
         except WeeklyContent.DoesNotExist:
             messages.error(request, "Raid not found.")
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
 
         return redirect('lost_ark:weekly_content_table')
