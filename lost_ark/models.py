@@ -161,9 +161,9 @@ class CharacterWeeklyContent(models.Model):
         # Update the status based on the number of completed gates
         if completed == 0:
             self.status = 'Not Done'
-        elif completed == 1:
+        elif completed == 1 and total_gates > 1:
             self.status = 'Gate 2'
-        elif completed == 2:
+        elif completed == 2 and total_gates > 2:
             self.status = 'Gate 3'
         elif completed == 3 and total_gates > 3:
             self.status = 'Gate 4'
