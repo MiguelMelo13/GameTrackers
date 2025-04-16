@@ -14,18 +14,14 @@ DIFFICULTY_CHOICES = [
 ]
 
 RAID_CHOICES = [
-    ('Valtan', 'Valtan'),
-    ('Vykas', 'Vykas'),
-    ('Kakul-Saydon', 'Kakul-Saydon'),
-    ('Brelshaza', 'Brelshaza'),
-    ('Akkan', 'Akkan'),
+
     ('Thaemine', 'Thaemine'),
-    ('Echidna (Act 1)', 'Echidna (Act 1)'),
+    ('Echidna', 'Echidna'),
+    ('Behemoth', 'Behemoth'),
+    ('Aegir (Act 1)', 'Aegir (Act 1)'),
     ('Brelshaza (Act 2)', 'Brelshaza (Act 2)'),
     ('Kazeros (Act 3)', 'Kazeros (Act 3)'),
-    ('Kayangel', 'Kayangel'),
-    ('Ivory Tower', 'Ivory Tower'),
-    ('Behemoth', 'Behemoth'),
+
 ]
 
 CLASS_CHOICES = [
@@ -194,6 +190,9 @@ class CharacterWeeklyContent(models.Model):
                 locked_ids.add(entry.gate.id)
 
         return gates.exclude(id__in=locked_ids)
+
+    def get_status_display_choices(self):
+        return self._meta.get_field('status').choices
 
 
 class CompletedGate(models.Model):
