@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Weekly Content Table</h2>
+
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+
+        <!-- Row for the first line of 3 cards -->
+        <div class="row">
+            {% for character_data in characters_with_weekly_content %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">{{ character_data.character.name }}
+                                - {{ character_data.character.character_class }}
+                                - {{ character_data.character.item_level }}</h5>
+                        </div>
+
+                        <div class="card-body">
+                            {% include 'lost_ark/weekly_content/character_info.html' with character=character_data.character weekly_contents=character_data.weekly_contents can_add_raid=character_data.can_add_raid %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

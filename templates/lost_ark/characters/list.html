@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container" style="padding-top: 80px; padding-bottom: 80px;">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Your Characters</h2>
+                    <a href="{% url 'lost_ark:character_create' %}" class="btn btn-primary">
+                        <i class="bi bi-plus-lg"></i> Add Character
+                    </a>
+                </div>
+
+                <div class="list-group">
+                    {% for character in characters %}
+                        <div class="list-group-item list-group-item-action bg-dark text-light border-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-1">
+                                        {{ character.name }}
+                                        <span class="badge bg-secondary">{{ character.character_class }}</span>
+                                        {% if character.is_main %}
+                                            <span class="badge bg-primary">Main</span>
+                                        {% endif %}
+                                    </h5>
+                                    <small>Item Level: {{ character.item_level }}</small>
+                                </div>
+                                <div>
+                                    <a href="{% url 'lost_ark:character_update' character.pk %}"
+                                       class="btn btn-sm btn-outline-light me-2">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="{% url 'lost_ark:character_delete' character.pk %}"
+                                       class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="alert alert-info">
+                            You haven't added any characters yet.
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

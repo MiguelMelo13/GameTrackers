@@ -1,0 +1,69 @@
+<div class="character-info">
+
+    {% if weekly_contents %}
+        <!-- Raid Table -->
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Raid</th>
+                <th scope="col">Difficulty</th>
+                <th scope="col">Progress</th>
+                <th scope="col">Gold Earned / Total Gold</th>
+                <th scope="col">Update Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for weekly in weekly_contents %}
+                <tr>
+                    <td>{{ weekly.weekly_content.name }}</td>
+                    <td>{{ weekly.weekly_content.difficulty }}</td>
+                    <td>{{ weekly.status|capfirst }}</td>
+                    <td>{{ weekly.gold_earned }} / {{ weekly.total_gold }}</td>
+                    <td>
+                        <form method="post" action="{% url 'lost_ark:update_weekly_status' %}" class="d-inline-block">
+                            {% csrf_token %}
+                            <input type="hidden" name="weekly_content_id" value="{{ weekly.id }}">
+                            <input type="hidden" name="character_id" value="{{ character.id }}">
+                            <div class="form-group">
+                                <select name="status" class="form-select form-select-sm">
+                                    <option value="Not Done" {% if weekly.status == 'Not Done' %}selected{% endif %}>
+                                        Not Done
+                                    </option>
+                                    {% for gate_num in weekly.gate_numbers %}
+                                        <option value="Gate {{ gate_num }}"
+                                                {% if weekly.status == 'gate_'|add:gate_num|stringformat:"s" %}selected{% endif %}>
+                                            Gate {{ gate_num }}
+                                        </option>
+                                    {% endfor %}
+                                    <option value="Completed" {% if weekly.status == 'Completed' %}selected{% endif %}>
+                                        Completed
+                                    </option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-sm btn-primary mt-2">Update</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No weekly content assigned to this character yet.</p>
+    {% endif %}
+
+    <!-- Add Raid Form -->
+    {% if can_add_raid %}
+        <h6 class="mt-4">Add Raid</h6>
+        <form method="post" action="{% url 'lost_ark:weekly_content_add' %}" class="d-flex align-items-center">
+            {% csrf_token %}
+            <input type="hidden" name="character_id" value="{{ character.id }}">
+            <select name="raid_id" class="form-select form-select-sm me-2">
+                {% for raid in raids %}
+                    <option value="{{ raid.id }}">{{ raid.name }} ({{ raid.difficulty }})</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-sm btn-primary">Add Raid</button>
+        </form>
+    {% endif %}
+</div>
+
