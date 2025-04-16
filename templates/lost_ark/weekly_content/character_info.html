@@ -54,9 +54,8 @@
     <!-- Add Raid Form -->
     {% if can_add_raid %}
         <h6 class="mt-4">Add Raid</h6>
-        <form method="post" class="d-flex align-items-center">
+        <form method="post" action="{% url 'lost_ark:weekly_content_add' %}" class="d-flex align-items-center">
             {% csrf_token %}
-            <input type="hidden" name="form_type" value="add_raid">
             <input type="hidden" name="character_id" value="{{ character.id }}">
             <select name="raid_id" class="form-select form-select-sm me-2">
                 {% for raid in raids %}
@@ -67,3 +66,4 @@
         </form>
     {% endif %}
 </div>
+

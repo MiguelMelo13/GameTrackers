@@ -17,6 +17,7 @@ urlpatterns = [
     # --------------WEEKLY CONTENT VIEWS------------------------#
 
     path('weekly_content/', views.WeeklyContentTableView.as_view(), name='weekly_content_table'),
-    path('update_weekly_status/', views.update_weekly_status.as_view(), name='update_weekly_status'),
-    # This needs to be as_view() for CBV
+    path('update_weekly_status/', views.WeeklyStatusUpdateView.as_view(), name='update_weekly_status'),
+    path('weekly_content/add/', views.WeeklyContentAddView.as_view(), name='weekly_content_add'),
+
 ]
