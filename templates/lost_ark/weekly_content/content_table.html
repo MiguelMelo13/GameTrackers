@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'lost_ark/base_extension.html' %}
 
 {% block content %}
     <div class="container mt-5">
@@ -7,8 +7,6 @@
         {% if error %}
             <div class="alert alert-danger">{{ error }}</div>
         {% endif %}
-
-        <!-- Row for the first line of 3 cards -->
         <div class="row">
             {% for character_data in characters_with_weekly_content %}
                 <div class="col-md-4 mb-4">
@@ -17,8 +15,12 @@
                             <h5 class="mb-0">{{ character_data.character.name }}
                                 - {{ character_data.character.character_class }}
                                 - {{ character_data.character.item_level }}</h5>
+                            <!-- Edit button -->
+                            <a href="{% url 'lost_ark:character_update' character_data.character.id %}"
+                               class="btn btn-sm btn-outline-warning" title="Edit Character">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
                         </div>
-
                         <div class="card-body">
                             {% include 'lost_ark/weekly_content/character_info.html' with character=character_data.character weekly_contents=character_data.weekly_contents can_add_raid=character_data.can_add_raid %}
                         </div>

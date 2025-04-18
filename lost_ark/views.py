@@ -49,13 +49,22 @@ class CharacterUpdateView(UserOwnershipMixin, UpdateView):
     model = Character
     form_class = CharacterForm
     template_name = 'lost_ark/characters/form.html'
-    success_url = reverse_lazy('lost_ark:character_list')
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
         if not obj.user_can_access(self.request.user):
             raise PermissionDenied
         return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Get the 'next' URL from GET or fallback to the referer
+        context['next'] = self.request.GET.get('next') or self.request.META.get('HTTP_REFERER', '/')
+        return context
+
+    def get_success_url(self):
+        # Return the 'next' parameter from the form POST or fallback to HTTP_REFERER
+        return self.request.POST.get('next') or self.request.META.get('HTTP_REFERER', '/')
 
 
 class CharacterDeleteView(UserOwnershipMixin, DeleteView):
