@@ -91,6 +91,8 @@ class WeeklyContentTableView(TemplateView):
         raids = WeeklyContent.objects.all()
 
         characters_with_weekly_content = []
+        total_gold_earned = 0
+        total_possible_gold = 0
 
         for character in characters:
             character_weekly_contents = CharacterWeeklyContent.objects.filter(character=character)
@@ -112,6 +114,10 @@ class WeeklyContentTableView(TemplateView):
                                      gate.number > 1],
                 })
 
+                # Accumulate gold totals
+                total_gold_earned += gold_earned
+                total_possible_gold += total_gold
+
             characters_with_weekly_content.append({
                 'character': character,
                 'weekly_contents': weekly_contents_data,
@@ -121,6 +127,8 @@ class WeeklyContentTableView(TemplateView):
         return {
             'characters_with_weekly_content': characters_with_weekly_content,
             'raids': raids,
+            'total_gold_earned': total_gold_earned,
+            'total_possible_gold': total_possible_gold,
         }
 
 
