@@ -79,6 +79,7 @@ class CharacterWeeklyContentAdmin(admin.ModelAdmin):
         Handles the creation or deletion of CompletedGate objects based on status and completion count.
         """
         gate_mapping = {
+            'Not Done': 0,
             'Gate 2': 1,
             'Gate 3': 2,
             'Gate 4': 3,
