@@ -1,24 +1,24 @@
-{% extends 'base.html' %}
+{% extends 'lost_ark/base_extension.html' %}
 {% load socialaccount %}
 
 {% block title %}Lost Ark - Home{% endblock %}
 
 {% block content %}
     <div class="container text-center">
-        <h1 class="my-4">Welcome to Lost Ark Tracker</h1>
+        <h1 class="display-5 fw-bold my-4">Welcome to Lost Ark Tracker</h1>
 
-        <div class="row">
-            <!-- Button to go to Character List -->
-            <div class="col-md-6 mb-4">
-                <a href="{% url 'lost_ark:character_list' %}" class="btn btn-primary btn-lg w-100">
-                    View Character List
+        <div class="row justify-content-center">
+            <!-- Character List -->
+            <div class="col-md-6 col-lg-5 mb-4">
+                <a href="{% url 'lost_ark:character_list' %}" class="btn btn-outline-primary btn-lg w-100 py-3">
+                    <i class="bi bi-people-fill me-2"></i> View Character List
                 </a>
             </div>
 
-            <!-- Button to go to Weekly Content Table -->
-            <div class="col-md-6 mb-4">
-                <a href="{% url 'lost_ark:weekly_content_table' %}" class="btn btn-success btn-lg w-100">
-                    View Weekly Content Table
+            <!-- Weekly Content Table -->
+            <div class="col-md-6 col-lg-5 mb-4">
+                <a href="{% url 'lost_ark:weekly_content_table' %}" class="btn btn-outline-success btn-lg w-100 py-3">
+                    <i class="bi bi-calendar-week me-2"></i> View Weekly Content Table
                 </a>
             </div>
         </div>

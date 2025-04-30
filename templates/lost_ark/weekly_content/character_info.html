@@ -1,15 +1,16 @@
+{% load humanize %}
+
 <div class="character-info">
 
     {% if weekly_contents %}
         <!-- Raid Table -->
-        <table class="table table-striped">
+        <table class="table table-striped table-dark">
             <thead>
             <tr>
                 <th scope="col">Raid</th>
                 <th scope="col">Difficulty</th>
-                <th scope="col">Progress</th>
-                <th scope="col">Gold Earned / Total Gold</th>
-                <th scope="col">Update Status</th>
+                <th scope="col">Gold</th>
+                <th scope="col">Status</th>
             </tr>
             </thead>
             <tbody>
@@ -17,30 +18,73 @@
                 <tr>
                     <td>{{ weekly.weekly_content.name }}</td>
                     <td>{{ weekly.weekly_content.difficulty }}</td>
-                    <td>{{ weekly.status|capfirst }}</td>
-                    <td>{{ weekly.gold_earned }} / {{ weekly.total_gold }}</td>
-                    <td>
-                        <form method="post" action="{% url 'lost_ark:update_weekly_status' %}" class="d-inline-block">
+                    <td>{{ weekly.gold_earned|intcomma }} / {{ weekly.total_gold|intcomma }}</td>
+                    <td class = "text-center">
+                        <!-- Status Update Form -->
+                        <form method="post" action="{% url 'lost_ark:update_weekly_status' %}" class="d-inline-block"
+                              id="status-form-{{ weekly.id }}">
                             {% csrf_token %}
                             <input type="hidden" name="weekly_content_id" value="{{ weekly.id }}">
                             <input type="hidden" name="character_id" value="{{ character.id }}">
                             <div class="form-group">
-                                <select name="status" class="form-select form-select-sm">
-                                    <option value="Not Done" {% if weekly.status == 'Not Done' %}selected{% endif %}>
-                                        Not Done
-                                    </option>
-                                    {% for gate_num in weekly.gate_numbers %}
-                                        <option value="Gate {{ gate_num }}"
-                                                {% if weekly.status == 'gate_'|add:gate_num|stringformat:"s" %}selected{% endif %}>
-                                            Gate {{ gate_num }}
-                                        </option>
-                                    {% endfor %}
-                                    <option value="Completed" {% if weekly.status == 'Completed' %}selected{% endif %}>
-                                        Completed
-                                    </option>
-                                </select>
+                                <label>
+                                    <select name="status" class="form-select form-select-sm"
+                                            onchange="this.form.submit()">
+                                        {% for option in weekly.sorted_status_options %}
+                                            <option value="{{ option.value }}" style="color: {{ option.color }}"
+                                                    {% if option.selected %}selected{% endif %}>
+                                                {{ option.label }}
+                                            </option>
+                                        {% empty %}
+                                            <option value="">No options available</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
                             </div>
-                            <button type="submit" class="btn btn-sm btn-primary mt-2">Update</button>
+                        </form>
+
+                        <!-- Remove Button with Modal -->
+                        <form method="post" action="{% url 'lost_ark:weekly_content_remove' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="character_id" value="{{ character.id }}">
+                            <input type="hidden" name="raid_id" value="{{ weekly.weekly_content.id }}">
+
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                    data-bs-target="#confirmRemoveModal-{{ weekly.id }}" title="Remove Raid">
+                                <i class="bi bi-trash"></i>
+                            </button>
+
+                            <!-- Confirmation Modal -->
+                            <div class="modal fade" id="confirmRemoveModal-{{ weekly.id }}" tabindex="-1"
+                                 aria-labelledby="confirmRemoveModalLabel-{{ weekly.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form method="post" action="{% url 'lost_ark:weekly_content_remove' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="character_id" value="{{ character.id }}">
+                                            <input type="hidden" name="raid_id" value="{{ weekly.weekly_content.id }}">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="confirmRemoveModalLabel-{{ weekly.id }}">
+                                                    Confirm Removal
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to remove
+                                                <strong>{{ weekly.weekly_content.name }}</strong> from
+                                                <strong>{{ character.name }}</strong>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Cancel
+                                                </button>
+                                                <button type="submit" class="btn btn-danger">Yes, Remove</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     </td>
                 </tr>
@@ -53,17 +97,20 @@
 
     <!-- Add Raid Form -->
     {% if can_add_raid %}
-        <h6 class="mt-4">Add Raid</h6>
+        <h6 class="mt-4 text-light">Add Raid</h6>
         <form method="post" action="{% url 'lost_ark:weekly_content_add' %}" class="d-flex align-items-center">
             {% csrf_token %}
             <input type="hidden" name="character_id" value="{{ character.id }}">
-            <select name="raid_id" class="form-select form-select-sm me-2">
-                {% for raid in raids %}
-                    <option value="{{ raid.id }}">{{ raid.name }} ({{ raid.difficulty }})</option>
-                {% endfor %}
-            </select>
+            <label>
+                <select name="raid_id" class="form-select form-select-sm me-2">
+                    {% for raid in raids|dictsort:"name" %}
+                        <option value="{{ raid.id }}">{{ raid.name }} ({{ raid.difficulty }})</option>
+                    {% endfor %}
+                </select>
+            </label>
             <button type="submit" class="btn btn-sm btn-primary">Add Raid</button>
         </form>
     {% endif %}
 </div>
 
+<script src='/static/js/scripts.js'></script>

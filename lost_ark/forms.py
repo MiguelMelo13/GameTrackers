@@ -6,7 +6,7 @@ from .models import Character, CharacterWeeklyContent
 class CharacterForm(forms.ModelForm):
     class Meta:
         model = Character
-        fields = ['name', 'character_class', 'item_level', 'roster_level', 'is_main']
+        fields = ['name', 'character_class', 'item_level', 'roster_level', 'is_main', 'is_gold_earner']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'character_class': forms.Select(attrs={'class': 'form-select'}),

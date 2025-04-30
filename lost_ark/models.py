@@ -90,7 +90,7 @@ class Character(models.Model):
                 user=self.user,
                 is_gold_earner=True  # Changed from gold_earner to is_gold_earner
             ).count()
-            if gold_earner_count >= 6:
+            if gold_earner_count > 6:
                 raise ValueError(
                     "A party can have no more than 6 gold earners. Untick another character to make this one a gold earner.")
 

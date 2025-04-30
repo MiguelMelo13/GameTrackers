@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block extra_nav %}
+    {% if request.resolver_match.app_name == 'lost_ark' %}
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'weekly_content_table' or request.resolver_match.url_name == 'update_weekly_status' or request.resolver_match.url_name == 'weekly_content_add' %}active{% endif %}"
+                   href="{% url 'lost_ark:weekly_content_table' %}">
+                    <i class="bi bi-calendar-week me-1"></i> Weekly Content
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if 'character' in request.resolver_match.url_name %}active{% endif %}"
+                   href="{% url 'lost_ark:character_list' %}">
+                    <i class="bi bi-people-fill me-1"></i> Characters
+                </a>
+            </li>
+        </ul>
+    {% endif %}
+{% endblock %}

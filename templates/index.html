@@ -2,7 +2,7 @@
 {% load socialaccount %}
 
 {% block content %}
-    <div class="row justify-content-center">
+    <section class="row justify-content-center">
         <div class="col-md-8 text-center">
             <h1 class="display-4 mb-4">Game Trackers</h1>
 
@@ -12,7 +12,7 @@
                         <h5 class="card-title">Welcome back!</h5>
                         <p class="card-text">You are logged in as <strong>{{ user.username }}</strong></p>
                         <p class="card-text">Start tracking your games or view your collection.</p>
-                        <a href="lost_ark" class="btn btn-primary">Go to Lost Ark</a>
+                        <a href="{% url 'lost_ark:home' %}" class="btn btn-primary">Go to Lost Ark</a>
                     </div>
                 </div>
             {% else %}
@@ -27,5 +27,5 @@
                 </div>
             {% endif %}
         </div>
-    </div>
+    </section>
 {% endblock %}
