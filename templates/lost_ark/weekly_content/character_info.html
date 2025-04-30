@@ -41,6 +41,53 @@
                                 </label>
                             </div>
                         </form>
+
+                        <!-- Remove  -->
+                        <form method="post" action="{% url 'lost_ark:weekly_content_remove' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="character_id" value="{{ character.id }}">
+                            <input type="hidden" name="raid_id" value="{{ weekly.weekly_content.id }}">
+                            <!-- Remove Button (Triggers Modal) -->
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#confirmRemoveModal-{{ weekly.id }}"
+                                    title="Remove Raid">
+                                <i class="bi bi-trash"></i>
+                            </button>
+
+
+                            <!-- Confirmation Modal -->
+                            <div class="modal fade" id="confirmRemoveModal-{{ weekly.id }}" tabindex="-1"
+                                 aria-labelledby="confirmRemoveModalLabel-{{ weekly.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form method="post" action="{% url 'lost_ark:weekly_content_remove' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="character_id" value="{{ character.id }}">
+                                            <input type="hidden" name="raid_id" value="{{ weekly.weekly_content.id }}">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="confirmRemoveModalLabel-{{ weekly.id }}">
+                                                    Confirm Removal</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to remove
+                                                <strong>{{ weekly.weekly_content.name }}</strong> from
+                                                <strong>{{ character.name }}</strong>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Cancel
+                                                </button>
+                                                <button type="submit" class="btn btn-danger">Yes, Remove</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </td>
                 </tr>
             {% endfor %}
@@ -67,6 +114,7 @@
         </form>
     {% endif %}
 </div>
+
 
 <script>
     // Ensure the selected option maintains its color when page loads

@@ -19,5 +19,6 @@ urlpatterns = [
     path('weekly_content/', views.WeeklyContentTableView.as_view(), name='weekly_content_table'),
     path('update_weekly_status/', views.WeeklyStatusUpdateView.as_view(), name='update_weekly_status'),
     path('weekly_content/add/', views.WeeklyContentAddView.as_view(), name='weekly_content_add'),
+    path('weekly_content/remove/', views.WeeklyContentRemoveView.as_view(), name='weekly_content_remove'),
 
 ]

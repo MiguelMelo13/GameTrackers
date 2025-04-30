@@ -295,3 +295,39 @@ class WeeklyContentAddView(View):
             messages.error(request, f"An error occurred: {str(e)}")
 
         return redirect('lost_ark:weekly_content_table')
+
+
+class WeeklyContentRemoveView(View):
+    def post(self, request, *args, **kwargs):
+        character_id = request.POST.get('character_id')
+        raid_id = request.POST.get('raid_id')
+
+        if not character_id or not raid_id:
+            messages.error(request, "Missing character or raid selection.")
+            return redirect('lost_ark:weekly_content_table')
+
+        try:
+            character = Character.objects.get(id=character_id, user=request.user)
+            weekly_content = WeeklyContent.objects.get(id=raid_id)
+
+            assignment = CharacterWeeklyContent.objects.filter(
+                character=character,
+                weekly_content=weekly_content,
+                week=get_current_week()
+            ).first()
+
+            if not assignment:
+                messages.error(request, f"{weekly_content.name} is not assigned to {character.name} this week.")
+                return redirect('lost_ark:weekly_content_table')
+
+            assignment.delete()
+            messages.success(request, f"{weekly_content.name} successfully removed for {character.name}.")
+
+        except Character.DoesNotExist:
+            messages.error(request, "Character not found.")
+        except WeeklyContent.DoesNotExist:
+            messages.error(request, "Raid not found.")
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+
+        return redirect('lost_ark:weekly_content_table')
