@@ -144,7 +144,6 @@ class WeeklyContentTableView(TemplateView):
 
                 ))
 
-                print(all_status_options)  # Verify the order
                 weekly_contents_data.append({
                     'weekly_content': weekly_content.weekly_content,
                     'difficulty': weekly_content.weekly_content.difficulty,
@@ -167,8 +166,6 @@ class WeeklyContentTableView(TemplateView):
                 'can_add_raid': 3 > character_weekly_contents.count() >= 0,
             })
 
-            print(weekly_contents_data)
-
         return {
             'characters_with_weekly_content': characters_with_weekly_content,
             'raids': raids,
@@ -179,13 +176,9 @@ class WeeklyContentTableView(TemplateView):
 
 class WeeklyStatusUpdateView(View):
     def post(self, request, *args, **kwargs):
-        print("Raw POST data:", request.POST)  # Debug what's being received
         weekly_content_id = request.POST.get('weekly_content_id')
         status = request.POST.get('status')
         character_id = request.POST.get('character_id')
-
-        print(
-            f"Received - weekly_content_id: {weekly_content_id}, status: {status}, character_id: {character_id}")  # Debug
 
         if not all([weekly_content_id, status, character_id]):
             messages.error(request, "Missing required parameters")
@@ -197,17 +190,13 @@ class WeeklyStatusUpdateView(View):
                 id=weekly_content_id,
                 character_id=character_id
             )
-            print(f"Found weekly content: {weekly_content}")  # Debug
 
             # Normalize status
             status = status.replace('_', ' ').title()  # Handles both "gate_2" and "Gate 2"
-            print(f"Normalized status: {status}")  # Debug
 
             weekly_content.status = status
             weekly_content.save()
-            print(f"Saved status: {weekly_content.status}")  # Debug
 
-            # Rest of your method remains the same...
             total_gates = weekly_content.weekly_content.gates.count()
             completed_gate_count = weekly_content.completed_gate_entries.count()
 
